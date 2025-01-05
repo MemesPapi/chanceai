@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHANCE AI Coin Flip</title>
+    <style>
+        /* General styling */
+        body {
+            background-color: black;
+            color: white;
+            font-family: Helvetica, sans-serif;
+            text-align: center;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Title and subheading */
+        h1 {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+
+        /* Coin container */
+        #coin-container {
+            margin: 20px;
+        }
+
+        canvas {
+            background-color: black;
+            border-radius: 50%;
+            margin: 20px;
+            width: 300px;
+            height: 300px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Button styling */
+        button {
+            background-color: white;
+            color: black;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>CHANCE AI</h1>
+        <p>The Power of Chance</p>
+
+        <!-- Coin flip canvas -->
+        <div id="coin-container">
+            <canvas id="coinCanvas"></canvas>
+        </div>
+
+        <!-- Button to flip the coin -->
+        <button id="flipButton">Flip the Coin</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('coinCanvas');
+        const ctx = canvas.getContext('2d');
+        const flipButton = document.getElementById('flipButton');
+
+        canvas.width = 300;
+        canvas.height = 300;
+
+        // Function to draw the circle (coin) and text
+        function drawCoin(word, color) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the coin circle
+            ctx.beginPath();
+            ctx.arc(150, 150, 140, 0, Math.PI * 2);
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+            ctx.closePath();
+
+            // Draw the inner circle
+            ctx.beginPath();
+            ctx.arc(150, 150, 100, 0, Math.PI * 2);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "white";
+            ctx.stroke();
+            ctx.closePath();
+
+            // Draw the word (Pump or Dump)
+            ctx.fillStyle = color;
+            ctx.font = "30px Helvetica";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(word, 150, 150);
+        }
+
+        // Function to handle the coin shuffle
+        function shuffleWord(count) {
+            const words = ["Pump", "Dump"];
+            const colors = ["green", "red"];
+            
+            if (count < 8) {  // Shuffle for a bit (about 2.4 seconds)
+                const word = words[count % 2];
+                const color = colors[count % 2];
+                drawCoin(word, color);
+
+                setTimeout(() => shuffleWord(count + 1), 300);  // Change every 0.3 seconds
+            } else {
+                // Show final result after shuffle (always "Pump")
+                drawCoin("Pump", "green");
+                setTimeout(clearText, 1500);  // Clear text after 1.5 seconds
+            }
+        }
+
+        // Function to clear the canvas after 1.5 seconds
+        function clearText() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw the coin again without text
+            drawCoin("", "black");
+        }
+
+        // Event listener for the flip button
+        flipButton.addEventListener('click', () => {
+            shuffleWord(0);  // Start the shuffle animation when button is clicked
+        });
+    </script>
+</body>
+</html>
